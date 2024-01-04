@@ -1,0 +1,28 @@
+body {
+  font-family: "Arvo", serif;
+}
+
+.main-title {
+  font-family: "Press Start 2P", system-ui;
+}
+
+.main-title {
+  color: #680000;
+}
+
+.fighting_game {
+  background-image: url(../img/decors-jeu-combat.gif);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card {
+  width: 18rem;
+}
+
+img {
+  width: 300px;
+  height: 300px;
+}
+
+
