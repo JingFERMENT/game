@@ -1,36 +1,39 @@
 <!-- séparer les logiques avec les affichages -->
 <?php
-require_once __DIR__ . '/Character.php';
-require_once __DIR__ . '/Hero.php';
-require_once __DIR__ . '/Orc.php';
+require_once (__DIR__ . '/Hero.php');
+require_once (__DIR__ . '/Orc.php');
 
+// Nouvel instance de la classe "heros"
 $heros = new Hero(1000, 0, 'laser', 150, 'bouclier', 450);
-// echo $heros . "<br>";
-$badOrc = new Orc(250, 0);
-// echo $badOrc . "<br>";
 
-// je veux stocker les valeurs du héros et de l'orc et je veux qu'elles ne bougent plus
+// Nouvel instance de la classe "badOrc"
+$badOrc = new Orc(250, 0);
+
+// Stocker les valeurs du héros et je veux qu'elles ne bougent plus
 $initialOrcHealth = $badOrc->getHealth();
 $initialOrcRage = $badOrc->getRage();
 $initialOrcDamage = $badOrc->attack();
 
+// Stocker les valeurs de l'orc et je veux qu'elles ne bougent plus
 $initialHerosHealth = $heros->getHealth();
 $initialHerosRage = $heros->getRage();
 $initialHerosWeaponDamage = $heros->getWeaponDamage();
 $initialHerosShieldValue = $heros->getShieldValue();
-?>
 
-<?php
 $myFight = [];
 $whoHasWon = null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
     $myFight[] = '<h2 class="main-title text-center py-5">Déroulement du combat</h2>';
-    $count = 1;
+    $countAttacks = 0;
+    $reverts = 0;
 
-    while ($heros->getHealth() > 0 && ($badOrc->getHealth() > 0)) {
+    // Tant que le héro et l'orc sont en vie
+    while ($heros->getHealth() > 0 && $badOrc->getHealth() > 0) {
 
-        $myFight[] = '<h5 class="main-title text-center py-3">Attaque</strong> ' . $count . '</h5>';
+        $countAttacks++;
+        $myFight[] = '<h5 class="main-title text-center py-3">Attaque</strong> ' . $countAttacks . '</h5>';
 
         // l'orc attaque
         $damage = $badOrc->attack();
@@ -49,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // rage actuelle du Héros
         $myFight[] = '<p class="text-center">Rage actuelle du héros est de : ' . $heros->getRage() . ' points </p>';
 
-        if ($heros->getRage() == 60) {
+        if ($heros->getHealth() > 0 && $heros->getRage() >= 60) {
+            $reverts ++ ;
             $attack = $heros->getWeaponDamage();
-            // l'orc est frappé
+            // l'orc subit une attaque
             $badOrc->attacked($attack);
             $heros->setRage(0);
         }
@@ -70,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = '<h4 class="main-title text-center">Le héros a gagné !</h4>';
             $whoHasWon = 'heros';
         }
-        $count++;
+        
     }
 }
 ?>
@@ -106,8 +110,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <form method="POST">
                 <div class="text-center py-3">
-                    <button id="start-btn" class="btn btn-danger btn-lg" type="submit" name="Commencer">Commencer</button>
-                </div>
+                <?php if ($whoHasWon == null) { ?>
+                <button id="start-btn" class="btn btn-danger btn-lg" type="submit" name="Commencer">Commencer</button>
+                <?php } ?>
+                <?php if ($whoHasWon == 'heros' || $whoHasWon == 'orc') { ?>
+                    <button id="start-btn" class="btn btn-danger btn-lg " type="submit" name="Rejouer">Rejouer</button>
+                <?php } ?>
+                    </div>
             </form>
             <h5><?= $result ?? ''?></h5>
         </div>
@@ -157,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row">
             <div class="text-center">
                 <?php
+                // rassembler les valeurs dans un tableau en une chaine de caractère
                     echo implode('', $myFight);
                     ?>
             </div>
@@ -168,4 +178,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </p>
     </footer>
 </body>
+
+<!-- fichier js-->
+<script>
+    let winner  = "<?=$whoHasWon?>"
+</script>
+<script src="/public/assets/js/script.js">
+
+</script>
 </html>

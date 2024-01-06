@@ -1,74 +1,69 @@
 <?php
-// nom de classe toujour singulier et masjuscule
-class Character
+class Character // Nom de classe => toujour singulier et masjuscule
 {
-    // visibilité: lecture et écriture / méthode: fonction déclaré dans une classe
-    // private / public: depuis l'exérieur de la classe / protected
-    private int $health;
-    private int $rage;
-    
-    // méthode magique: les uns après les autres
-    // hydrater notre objet
-    // par convention: au début des toutes les méthodes
-    // méthode magique est toujours public : automatiquement appelé lorsque l'on construit / appelé un instant précis
-    // permettre les deux paramètres optionelles 
-    public function __construct(int $health=100, int $rage=0)
-    {
-        $this->health = $health;
-        $this->rage = $rage;
-    }
+    // Visibilité : protected / private / public => par rapport à l'extérieur de la classe
+    // Déclaration des attributs
+    protected int $health;
+    protected int $rage;
+
+    // Méthode : fonction déclarée dans une classe
+    // "control" + "clic" = aller directement sur la méthode
+    // "control" + "entrer" = commentaire du doc du méthode
 
     /**
-     * méthode permettant de définir une valeur à l'attribut health
-     * @param int $health
+     * Méthode magique appelée automatiquement lors de l'instanciation d'une classe
+     * par convention: elles sont au début des toutes les méthodes
+     * 
+     * @param int $healthValue
+     * @param int $rageValue
+     */
+    public function __construct(int $healthValue, int $rageValue = 0)
+    {
+        $this->health = $healthValue;
+        $this->rage = $rageValue;
+    }
+    
+    /**
+     * Méthode permettant d'affecter la valeur passée en paramètre à l'attribut health
+     * @param int $value
      * 
      * @return void
      */
-    public function setHealth(int $health)
+    public function setHealth(int $value = 100): void
     {
-        $this->health = $health; 
-        // toujours les valeurs sauf les valeurs par défaut
+        $this->health = $value;
     }
 
-    
     /**
-     * méthode permettant de retounrer une valeur du 'health'
+     * Méthode permettant de retourner la valeur de l'attribut 'health"
      * @return int
      */
-    public function getHealth():int
+    public function getHealth(): int
     {
         return $this->health;
     }
 
     /**
-     * méthode permettant de définir une valeur à l'attribut rage
-     * @param int $rage
+     * Méthode permettant d'affecter la valeur passée en paramètre à l'attribut 'rage'
+     * @param int $value
      * 
-     * @return [type]
+     * @return void
      */
-
-    public function setRage(int $rage)
+    public function setRage(int $value = 0): void
     {
-        $this->rage = $rage;
+        $this->rage = $value;
     }
 
-        /**
-     * méthode permettant de retounrer une valeur du 'rage'
+    /**
+     * Méthode permettant de retourner la valeur de l'attribut 'rage"
      * @return int
      */
-    public function getRage():int
-    // array / float / bool: true or false / object / int / string 
+    public function getRage(): int
+    // type des valeurs retournées : array / float / booléen / objet / int / string 
     {
         return $this->rage;
     }
-
-
-
 }
-
-// $character1 = new Character(health:10000,rage: 22);
-// $character1->setHealth(12);
-// var_dump($character1);
 
 ?>
 
